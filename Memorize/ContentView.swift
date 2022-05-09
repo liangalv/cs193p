@@ -27,7 +27,7 @@ struct ContentView: View {
         HStack {
             // you must prespecify the values here if it is the case that the value has no intial value
             ForEach(emojis, id: \.self){ emoji in
-                CardView(
+                CardView(content: emoji)
             }
             
         }
@@ -74,7 +74,7 @@ struct CardView: View {
                     .stroke(lineWidth: 3)
                 shape
                     .foregroundColor(.white)
-                Text(content// in order to avoid all the boilerplate that we use to generate all these rectangles, we can use a var)
+                Text(content)// in order to avoid all the boilerplate that we use to generate all these rectangles, we can use a var)
             }else{
                 shape
                     .foregroundColor(.blue)
