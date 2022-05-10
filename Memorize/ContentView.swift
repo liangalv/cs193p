@@ -22,15 +22,24 @@ struct ContentView: View {
     //ContentView is just the name of our data structure
     // :View this is indicating to swift that this struct that we are building behaves like a "View" because this is functional programming, the behaviour of things is crucial
     //when we declare something as behaving like a view, it's really a double edge sword, the moment that you declare that something behaves like a view you get all the SwiftUI functionality, this also implies that there are respoinsiblities, when you want something to behave like a view and really that just requires for you to have the "body" variable below
-
+    @State var emojiCount = 4
     var body: some View {
-        HStack {
-            // you must prespecify the values here if it is the case that the value has no intial value
-            ForEach(emojis, id: \.self){ emoji in
-                CardView(content: emoji)
-            }
-            
+        VStack {
+            HStack {
+                // you must prespecify the values here if it is the case that the value has no intial value
+                ForEach(emojis[0..<emojiCount], id: \.self){ emoji in
+                    CardView(content: emoji)
+                }
+                
+            }.padding(.horizontal).foregroundColor(.red)
+            HStack{
+                remove
+                Spacer()
+                add
+                
+            }.padding(.horizontal)
         }
+        
 //placing modifiers on view combiners
         // there are really two types of things that you'll see in a Zstack
         // you'll see that the items inherit the color from its container, really just depends if the modifier draws a new shape, this is only the default color, you can still override the color
@@ -51,7 +60,18 @@ struct ContentView: View {
         //the really useful views are those that combine these primitive views into more complicated views
         
     }
+    var remove: some View {
+        Button(action: {emojiCount -= 1}){
+            Text("Decrease")
+        }
+    }
+    var add: some View {
+        Button(action: {emojiCount += 1}){
+            Text("Increase")
+        }
+    }
 }
+
 
 //creating these views is the heart of SwiftUI programming
 
@@ -77,7 +97,7 @@ struct CardView: View {
                 Text(content)// in order to avoid all the boilerplate that we use to generate all these rectangles, we can use a var)
             }else{
                 shape
-                    .foregroundColor(.blue)
+                    .foregroundColor(.red)
             }
         }.onTapGesture{isFaceUp = !isFaceUp}
     }
