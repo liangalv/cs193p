@@ -13,7 +13,7 @@ class EmojiMemoryGame: ObservableObject {
     // our ViewModel needs a connection to model, our ViewModel is going to create it's own model, that's not always the case for a ViewModel
     
     static func createMemoryGame() -> MemoryGame<String>{
-        MemoryGame(numberOfPairsOfCards: 4){pairIndex in
+        MemoryGame(numberOfPairsOfCards: 15){pairIndex in
             emojis[pairIndex]
         }
     }

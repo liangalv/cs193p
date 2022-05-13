@@ -13,21 +13,25 @@ import Foundation // array, string, dictionary, basic strcuts that you need to b
 struct MemoryGame<CardContent> { // this struct is going to represent our model
     private(set) var cards: Array<Card>
     
-    mutating func choose(_ card: Card){
-        let chosenIndex = index(of: card)
-        cards[chosenIndex].isFaceUp.toggle()
-        print ("chosenCard = \(card)")
-        
-    }
+    private var indexOfTheOneAndOnlyFaceUpCard: Int?
     
-    func index(of card: Card) -> Int{
-        for index in 0..<cards.count{
-            if cards[index].id == card.id{
-                return index
-                
+    mutating func choose(_ card: Card){
+        if let chosenIndex = cards.firstIndex(where: {$0.id == card.id}){
+            if let potentialMatchIndex = indexOfTheOneAndOnlyFaceUpCard{
+                if cards[chosenIndex].content == cards[potentialMatchIndex].content {
+                    cards[chosenIndex].isMatched = true
+                    cards[potentialMatchIndex].isMatched = true
+                }
+                indexOfTheOneAndOnlyFaceUpCard = nil
+            } else {
+                for index in cards.indices {
+                    cards[index].isFaceUp = false
+                }
+                indexOfTheOneAndOnlyFaceUpCard = chosenIndex
             }
+            cards[chosenIndex].isFaceUp.toggle()
+            
         }
-        return 0
     }
     
     init(numberOfPairsOfCards: Int, createCardContent: (Int) -> CardContent){
