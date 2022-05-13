@@ -18,18 +18,18 @@ import SwiftUI
 //swift has support for both OOP and functional programming, we will be using the functional framework in order to build our UI
 //we use the OOP model in order to hook up our model(Logic) to our UI
 struct ContentView: View {
+    let viewModel: EmojiMemoryGame
     
     //ContentView is just the name of our data structure
     // :View this is indicating to swift that this struct that we are building behaves like a "View" because this is functional programming, the behaviour of things is crucial
     //when we declare something as behaving like a view, it's really a double edge sword, the moment that you declare that something behaves like a view you get all the SwiftUI functionality, this also implies that there are respoinsiblities, when you want something to behave like a view and really that just requires for you to have the "body" variable below
-    @State var emojiCount = 9
     var body: some View {
         VStack {
             ScrollView{
                 LazyVGrid(columns:[GridItem(.adaptive(minimum: 65))]){ // the lazy in the name lazy V grid means that the views will only get accessed when aboslutely necessary as to not take computational power
                     // you must prespecify the values here if it is the case that the value has no intial value
-                    ForEach(emojis[0..<emojiCount], id: \.self){ emoji in
-                        CardView(content: emoji).aspectRatio(2/3, contentMode: .fit)
+                    ForEach(viewModel.cards){card in
+                        CardView(card: card).aspectRatio(2/3, contentMode: .fit)
                     }
                     
                 }.padding(.horizontal).foregroundColor(.red)
@@ -65,27 +65,24 @@ struct ContentView: View {
     // you as the programmer is also at liberty to remove the content parameter label as long as it sits as the last parameter, and as long as the value that is being passed in is an argument
     // you can also pass in the alignment parameter into the Zstack container
 struct CardView: View {
-    var content: String
-    // variables in swift must always have a value
-   
-    @State var isFaceUp: Bool = false
+    let card: MemoryGame<String>.Card
     var body: some View{ // this view is a variable, as it's calculated everytime someone asks for it
         ZStack{
             // in order to avoid all the boilerplate that we use to generate all these rectangles, we can use a var
             let shape = RoundedRectangle(cornerRadius: 20) // we didn't need to specifiy this type here
                 // 2 reasons 1. assigning "shape" a value will allow swift to engage type inference
                 //2. if we declared the type and decided to change the shape later on, we would have to redeclare the variable type
-            if isFaceUp{
+            if card.isFaceUp{
                 shape
                     .strokeBorder(lineWidth: 3)
                 shape
                     .foregroundColor(.white)
-                Text(content)// in order to avoid all the boilerplate that we use to generate all these rectangles, we can use a var)
+                Text(card.content)// in order to avoid all the boilerplate that we use to generate all these rectangles, we can use a var)
             }else{
                 shape
                     .foregroundColor(.red)
             }
-        }.onTapGesture{isFaceUp = !isFaceUp}
+        }
     }
 }
 
@@ -118,9 +115,10 @@ struct CardView: View {
 // we generally do not even touch this code
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        let game = EmojiMemoryGame()
+        ContentView(viewModel: game)
             .preferredColorScheme(.dark)
-        ContentView()
+        ContentView(viewModel: game)
             .preferredColorScheme(.light)
 
     }

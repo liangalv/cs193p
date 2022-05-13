@@ -25,7 +25,7 @@ class EmojiMemoryGame {
     // in classes your class variables have to be given a value
     
     var cards: Array<MemoryGame<String>.Card>{
-        return model.cards
+         model.cards
     }
     // this variables values is read only, and privatizes the setting ability of the cards because it needs to calculated by calling a function
 }
