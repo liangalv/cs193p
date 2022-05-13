@@ -18,7 +18,7 @@ import SwiftUI
 //swift has support for both OOP and functional programming, we will be using the functional framework in order to build our UI
 //we use the OOP model in order to hook up our model(Logic) to our UI
 struct ContentView: View {
-    var emojis = ["👽","😃","😁","🤨","🫡","😐","🥱","😵‍💫","🤢","👩‍❤️‍💋‍👨","👨‍👨‍👧","💍","🐯","🥖","🍔","🥕","🌽"]
+    
     //ContentView is just the name of our data structure
     // :View this is indicating to swift that this struct that we are building behaves like a "View" because this is functional programming, the behaviour of things is crucial
     //when we declare something as behaving like a view, it's really a double edge sword, the moment that you declare that something behaves like a view you get all the SwiftUI functionality, this also implies that there are respoinsiblities, when you want something to behave like a view and really that just requires for you to have the "body" variable below
@@ -34,13 +34,6 @@ struct ContentView: View {
                     
                 }.padding(.horizontal).foregroundColor(.red)
             }
-            Spacer()
-            HStack{
-                remove
-                Spacer()
-                add
-                
-            }.font(.largeTitle).padding(.horizontal)
         }
         
 //placing modifiers on view combiners
@@ -62,22 +55,6 @@ struct ContentView: View {
         // "some View" therefore indicates to the complier that the resulting value from the function will be some view, and to go figure out what that is
         //the really useful views are those that combine these primitive views into more complicated views
         
-    }
-    var remove: some View {
-        Button(action: {
-            if emojiCount > 1{
-            emojiCount -= 1}
-        }){
-            Image(systemName: "minus.circle")
-        }
-    }
-    var add: some View {
-        Button(action: {
-            if emojiCount < emojis.count{
-                emojiCount += 1}}
-        ){
-            Image(systemName: "plus.circle")
-        }
     }
 }
 
