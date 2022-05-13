@@ -18,23 +18,27 @@ import SwiftUI
 //swift has support for both OOP and functional programming, we will be using the functional framework in order to build our UI
 //we use the OOP model in order to hook up our model(Logic) to our UI
 struct ContentView: View {
-    let viewModel: EmojiMemoryGame
+    @ObservedObject var viewModel: EmojiMemoryGame
     
     //ContentView is just the name of our data structure
     // :View this is indicating to swift that this struct that we are building behaves like a "View" because this is functional programming, the behaviour of things is crucial
     //when we declare something as behaving like a view, it's really a double edge sword, the moment that you declare that something behaves like a view you get all the SwiftUI functionality, this also implies that there are respoinsiblities, when you want something to behave like a view and really that just requires for you to have the "body" variable below
     var body: some View {
-        VStack {
-            ScrollView{
-                LazyVGrid(columns:[GridItem(.adaptive(minimum: 65))]){ // the lazy in the name lazy V grid means that the views will only get accessed when aboslutely necessary as to not take computational power
-                    // you must prespecify the values here if it is the case that the value has no intial value
-                    ForEach(viewModel.cards){card in
-                        CardView(card: card).aspectRatio(2/3, contentMode: .fit)
-                    }
-                    
-                }.padding(.horizontal).foregroundColor(.red)
-            }
+        ScrollView{
+            LazyVGrid(columns:[GridItem(.adaptive(minimum: 65))]){ // the lazy in the name lazy V grid means that the views will only get accessed when aboslutely necessary as to not take computational power
+                // you must prespecify the values here if it is the case that the value has no intial value
+                ForEach(viewModel.cards){card in
+                    CardView(card: card)
+                        .aspectRatio(2/3, contentMode: .fit)
+                        .onTapGesture{
+                            viewModel.choose(card)
+                        }
+                        
+                }
+                
+            }.padding(.horizontal).foregroundColor(.red)
         }
+        
         
 //placing modifiers on view combiners
         // there are really two types of things that you'll see in a Zstack

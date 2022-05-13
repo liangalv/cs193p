@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-class EmojiMemoryGame {
+class EmojiMemoryGame: ObservableObject {
     static let emojis = ["👽","😃","😁","🤨","🫡","😐","🥱","😵‍💫","🤢","👩‍❤️‍💋‍👨","👨‍👨‍👧","💍","🐯","🥖","🍔","🥕","🌽"]
     //static keyword here makes this a 'Type Property' meaning that it's a property not on the particular instance of EmojiMemoryGame but rather a property on the type
     // our ViewModel needs a connection to model, our ViewModel is going to create it's own model, that's not always the case for a ViewModel
@@ -19,7 +19,7 @@ class EmojiMemoryGame {
     }
     // this is a "Type Method" meaning that the method is specific to the type, not an INSTANCE of the Type  
     
-    private var model: MemoryGame<String> = createMemoryGame()
+    @Published private var model: MemoryGame<String> = createMemoryGame()
     //gatekeeper role of the ViewModel, it protects the model from any ill intending Views, one of the ways we can do that is to make it so that the model is private, this is so that that the ViewModel is the only code that can see the model
     //private(set) can see the value, but cannot change values
     // in classes your class variables have to be given a value
@@ -28,4 +28,12 @@ class EmojiMemoryGame {
          model.cards
     }
     // this variables values is read only, and privatizes the setting ability of the cards because it needs to calculated by calling a function
+    
+    //MARK: - Intent(s)
+    func choose (_ card: MemoryGame<String>.Card){
+        model.choose(card)
+        
+    }
+    
 }
+
