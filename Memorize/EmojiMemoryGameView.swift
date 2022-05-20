@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  EmojiMemoryGameView.swift
 //  Memorize
 //
 //  Created by Alvin Liang on 2022-05-06.
@@ -17,21 +17,21 @@ import SwiftUI
 // not only can we have varibles inside our structs, we can also have functions in our structs
 //swift has support for both OOP and functional programming, we will be using the functional framework in order to build our UI
 //we use the OOP model in order to hook up our model(Logic) to our UI
-struct ContentView: View {
-    @ObservedObject var viewModel: EmojiMemoryGame
+struct EmojiMemoryGameView: View {
+    @ObservedObject var game: EmojiMemoryGame
     
-    //ContentView is just the name of our data structure
+    //EmojiMemoryGameView is just the name of our data structure
     // :View this is indicating to swift that this struct that we are building behaves like a "View" because this is functional programming, the behaviour of things is crucial
     //when we declare something as behaving like a view, it's really a double edge sword, the moment that you declare that something behaves like a view you get all the SwiftUI functionality, this also implies that there are respoinsiblities, when you want something to behave like a view and really that just requires for you to have the "body" variable below
     var body: some View {
         ScrollView{
             LazyVGrid(columns:[GridItem(.adaptive(minimum: 65))]){ // the lazy in the name lazy V grid means that the views will only get accessed when aboslutely necessary as to not take computational power
                 // you must prespecify the values here if it is the case that the value has no intial value
-                ForEach(viewModel.cards){card in
+                ForEach(game.cards){card in
                     CardView(card: card)
                         .aspectRatio(2/3, contentMode: .fit)
                         .onTapGesture{
-                            viewModel.choose(card)
+                            game.choose(card)
                         }
                         
                 }
@@ -53,7 +53,7 @@ struct ContentView: View {
             
         // Text("Hello, world!") is really just a function, in swift functions are first class citizens
         //this is a function with no name, and in this case returns a text "hello world!"(where the return statement is hiddden)
-        //this variable "body" is therefore not stored in memory, but rather is executed each time someone asks this ContentView struct what the value is
+        //this variable "body" is therefore not stored in memory, but rather is executed each time someone asks this EmojiMemoryGameView struct what the value is
         //A text is another struct that behavevs like a view
         //So you have a function here that returns something that behaves like a view
         // "some View" therefore indicates to the complier that the resulting value from the function will be some view, and to go figure out what that is
@@ -69,7 +69,13 @@ struct ContentView: View {
     // you as the programmer is also at liberty to remove the content parameter label as long as it sits as the last parameter, and as long as the value that is being passed in is an argument
     // you can also pass in the alignment parameter into the Zstack container
 struct CardView: View {
-    let card: MemoryGame<String>.Card
+     let card: MemoryGame<String>.Card
+    
+//    init (_ card: MemoryGame<String>.Card){
+//        self.card = card
+//    }
+    // you could place this init here 
+    
     var body: some View{ // this view is a variable, as it's calculated everytime someone asks for it
         ZStack{
             // in order to avoid all the boilerplate that we use to generate all these rectangles, we can use a var
@@ -118,14 +124,14 @@ struct CardView: View {
 
 
 
-// this code is the code that glues the ContentView to the previewer
+// this code is the code that glues the EmojiMemoryGameView to the previewer
 // we generally do not even touch this code
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         let game = EmojiMemoryGame()
-        ContentView(viewModel: game)
+        EmojiMemoryGameView(game: game)
             .preferredColorScheme(.dark)
-        ContentView(viewModel: game)
+        EmojiMemoryGameView(game: game)
             .preferredColorScheme(.light)
 
     }

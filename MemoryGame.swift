@@ -13,8 +13,38 @@ import Foundation // array, string, dictionary, basic strcuts that you need to b
 // we've turned this don't care into a mostly don't care 
 struct MemoryGame<CardContent> where CardContent: Equatable { // this struct is going to represent our model
     private(set) var cards: Array<Card>
+    // notice that these two pieces of code store the same information but in two different places
+    // i.e the "indexOfTheOneAndOnlyFaceUpCard" if these were to get out of sync then that would be problematic
     
-    private var indexOfTheOneAndOnlyFaceUpCard: Int?
+    private var indexOfTheOneAndOnlyFaceUpCard: Int?{
+        get {
+            let faceUpCardIndices = cards.indices.filter({cards[$0].isFaceUp})// you can replace the index variable with $0,$1,$2,$3... representing each additional arugment
+//            for index in cards.indices{
+//                if cards[index].isFaceUp{
+//                    faceUpCardIndices.append(index)
+//                }
+//            }
+            // this entire for loop is replaced by the functional chaining above
+            if faceUpCardIndices.count == 1{
+                return faceUpCardIndices.first
+            }else {
+                return nil
+            }
+            
+        }
+        set{
+            for index in cards.indices {// indices var here returns the range
+                if index != newValue{
+                    cards[index].isFaceUp = false
+                }else{
+                    cards[index].isFaceUp = true
+                }
+                
+            }
+            
+            
+        }
+    }
     // we need to check whether or there is a card face up
     
     mutating func choose(_ card: Card){
@@ -31,26 +61,22 @@ struct MemoryGame<CardContent> where CardContent: Equatable { // this struct is 
                     cards[chosenIndex].isMatched = true
                     cards[potentialMatchIndex].isMatched = true
                 }
-                indexOfTheOneAndOnlyFaceUpCard = nil
+                cards[chosenIndex].isFaceUp = true
                 // once those cards are matched, then there is no chosen faceup card and therefore isn't selected
-            } else { // in this case where there's no match
+                }else { // in this case where there's no match
                 //either they are already face down, or there are two cards face up
-                for index in cards.indices {// indices var here returns the range
-                    cards[index].isFaceUp = false
-                    
-                }
                 // this for-loops makes all the cards facedown
                 indexOfTheOneAndOnlyFaceUpCard = chosenIndex
                 // this sets a value for this optional
             }
-            cards[chosenIndex].isFaceUp.toggle()
+            
             // the card we just chose is going remain faceup, as it gets toggled back on for sure
             
         }
     }
     
     init(numberOfPairsOfCards: Int, createCardContent: (Int) -> CardContent){
-        cards = Array<Card>()
+        cards = [] //Array<Card>() because it understands that cards is an Array<Card> we don't need to specify the type here 
         //add numberOfPairsOfCards x 2 cards to cards array
         for pairIndex in 0..<numberOfPairsOfCards {
             // this content here is hard to determine what to use,as CardContent is a 'don't care' type, it should be the one creating the game that is ultimately respoinsible for the card game type created
@@ -66,11 +92,22 @@ struct MemoryGame<CardContent> where CardContent: Equatable { // this struct is 
     struct Card: Identifiable {
         // we've placed this struct inside of a struct, mostly this is just a naming things, this full name is Memorygame.Card
         // by nesting this we make it clear that this is a card that goes into our memorygame
-        var isFaceUp: Bool = false
-        var isMatched: Bool = false
-        var content: CardContent
-        var id: Int // this is really a generic and can be any typeis just needs to be hashable and equateable,must be able to look it up in a hashtable
+        var isFaceUp = false
+        var isMatched = false
+        let content: CardContent
+        let id: Int // this is really a generic and can be any typeis just needs to be hashable and equateable,must be able to look it up in a hashtable
         
     }
     
+}
+
+extension Array {
+    // this itself has to be a computed var, and not a stored variable
+    var oneAndOnly: Element?{
+        if self.count == 1 {
+            return self.first
+        }else{
+            return nil 
+        }
+    }
 }
