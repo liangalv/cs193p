@@ -18,31 +18,32 @@ struct MemoryGame<CardContent> where CardContent: Equatable { // this struct is 
     
     private var indexOfTheOneAndOnlyFaceUpCard: Int?{
         get {
-            let faceUpCardIndices = cards.indices.filter({cards[$0].isFaceUp})// you can replace the index variable with $0,$1,$2,$3... representing each additional arugment
+            cards.indices.filter({cards[$0].isFaceUp}).oneAndOnly// you can replace the index variable with $0,$1,$2,$3... representing each additional arugment
 //            for index in cards.indices{
 //                if cards[index].isFaceUp{
 //                    faceUpCardIndices.append(index)
 //                }
 //            }
             // this entire for loop is replaced by the functional chaining above
-            if faceUpCardIndices.count == 1{
-                return faceUpCardIndices.first
-            }else {
-                return nil
-            }
+//            if faceUpCardIndices.count == 1{
+//                return faceUpCardIndices.first
+//            }else {
+//                return nil
+//            }
             
         }
         set{
-            for index in cards.indices {// indices var here returns the range
-                if index != newValue{
-                    cards[index].isFaceUp = false
-                }else{
-                    cards[index].isFaceUp = true
-                }
-                
-            }
-            
-            
+            cards.indices.forEach{cards[$0].isFaceUp = ($0 == newValue)}
+//            for index in cards.indices {// indices var here returns the range
+//                if index != newValue{
+//                    cards[index].isFaceUp = false
+//                }else{
+//                    cards[index].isFaceUp = true
+//                }
+//
+//            }
+//
+//
         }
     }
     // we need to check whether or there is a card face up
@@ -104,10 +105,10 @@ struct MemoryGame<CardContent> where CardContent: Equatable { // this struct is 
 extension Array {
     // this itself has to be a computed var, and not a stored variable
     var oneAndOnly: Element?{
-        if self.count == 1 {
-            return self.first
+        if count == 1 {
+            return first
         }else{
-            return nil 
+            return nil
         }
     }
 }
