@@ -19,7 +19,7 @@ class EmojiMemoryGame: ObservableObject {
     }
     // this is a "Type Method" meaning that the method is specific to the type, not an INSTANCE of the Type  
     
-    @Published private var model: MemoryGame<String> = createMemoryGame()
+    @Published private var model: MemoryGame<String> = createMemoryGame()// you can detect changes in structs, but not classes te
     //gatekeeper role of the ViewModel, it protects the model from any ill intending Views, one of the ways we can do that is to make it so that the model is private, this is so that that the ViewModel is the only code that can see the model
     //private(set) can see the value, but cannot change values
     // in classes your class variables have to be given a value

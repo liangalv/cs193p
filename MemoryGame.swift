@@ -10,26 +10,41 @@
 import Foundation // array, string, dictionary, basic strcuts that you need to build your app
 
 // the goal of ViewModel is either to take a really large complicated model and create little small windows on it, or combine multiple small models
-struct MemoryGame<CardContent> { // this struct is going to represent our model
+// we've turned this don't care into a mostly don't care 
+struct MemoryGame<CardContent> where CardContent: Equatable { // this struct is going to represent our model
     private(set) var cards: Array<Card>
     
     private var indexOfTheOneAndOnlyFaceUpCard: Int?
+    // we need to check whether or there is a card face up
     
     mutating func choose(_ card: Card){
-        if let chosenIndex = cards.firstIndex(where: {$0.id == card.id}){
+        // you can't use && in an if statement if you start out with the let so we use "," instead
+        // choosing cards that are already matched, or already faceup should not affect the state of the model
+        if let chosenIndex = cards.firstIndex(where: {$0.id == card.id}),
+           !cards[chosenIndex].isFaceUp,
+           !cards[chosenIndex].isMatched{
+            // this line of code locates the "card" object which was clicked that is in Array<Card>
             if let potentialMatchIndex = indexOfTheOneAndOnlyFaceUpCard{
-                if cards[chosenIndex].content == cards[potentialMatchIndex].content {
+                //this sets the "potenialMatchIndex" to some variable if there is a card faceup
+                if (cards[chosenIndex].content == cards[potentialMatchIndex].content) {
+                    // this line of code checks the content and sees if they are the same
                     cards[chosenIndex].isMatched = true
                     cards[potentialMatchIndex].isMatched = true
                 }
                 indexOfTheOneAndOnlyFaceUpCard = nil
-            } else {
-                for index in cards.indices {
+                // once those cards are matched, then there is no chosen faceup card and therefore isn't selected
+            } else { // in this case where there's no match
+                //either they are already face down, or there are two cards face up
+                for index in cards.indices {// indices var here returns the range
                     cards[index].isFaceUp = false
+                    
                 }
+                // this for-loops makes all the cards facedown
                 indexOfTheOneAndOnlyFaceUpCard = chosenIndex
+                // this sets a value for this optional
             }
             cards[chosenIndex].isFaceUp.toggle()
+            // the card we just chose is going remain faceup, as it gets toggled back on for sure
             
         }
     }
