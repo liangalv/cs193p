@@ -77,29 +77,41 @@ struct CardView: View {
     // you could place this init here
     
     var body: some View{ // this view is a variable, as it's calculated everytime someone asks for it
-        ZStack{
-            // in order to avoid all the boilerplate that we use to generate all these rectangles, we can use a var
-            let shape = RoundedRectangle(cornerRadius: 20) // we didn't need to specifiy this type here
-                // 2 reasons 1. assigning "shape" a value will allow swift to engage type inference
-                //2. if we declared the type and decided to change the shape later on, we would have to redeclare the variable type
-            if card.isFaceUp{
-                shape
-                    .strokeBorder(lineWidth: 3)
-                shape
-                    .foregroundColor(.white)
-                Text(card.content)// in order to avoid all the boilerplate that we use to generate all these rectangles, we can use a var)
-            }else if card.isMatched{
-                shape.opacity(0)
+        GeometryReader(content: {geometry in
+            ZStack {
+                let shape = RoundedRectangle(cornerRadius: DrawingConstants.cornerRadius)
+                if card.isFaceUp{
+                    shape.fill().foregroundColor(.white)
+                    shape.strokeBorder(lineWidth: DrawingConstants.lineWidth)
+                    Text(card.content).font(font(in: geometry.size))
+                }
+                else if card.isMatched{
+                    shape.opacity(0)
+                }else{
+                    shape.fill()
+                }
             }
-            else{
-                shape
-                    .foregroundColor(.red)
-            }
-        }
+            
+        })
+    }
+    private func font(in size: CGSize) -> Font {
+        // where Font is just a static on font, it has a static func called System, and it will just make a system font of that size
+        Font.system(size: min(size.height, size.width)*DrawingConstants.fontScale)
+        
+    }
+    // generating some contants in our code
+    private struct DrawingConstants {
+        // we're never going to be actually generating any of these structs, they are only going to have static lets
+        static let cornerRadius: CGFloat = 20
+        static let lineWidth: CGFloat = 3
+        static let fontScale: CGFloat = 0.8
+        
+        // the beauty of generating these constants here, is that they are centralized and not hard coded into the program, such that they can be modified later on
+        
+        
     }
 }
 
-//added some comment 
 
 
 

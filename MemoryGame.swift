@@ -93,7 +93,7 @@ struct MemoryGame<CardContent> where CardContent: Equatable { // this struct is 
     struct Card: Identifiable {
         // we've placed this struct inside of a struct, mostly this is just a naming things, this full name is Memorygame.Card
         // by nesting this we make it clear that this is a card that goes into our memorygame
-        var isFaceUp = false
+        var isFaceUp = false 
         var isMatched = false
         let content: CardContent
         let id: Int // this is really a generic and can be any typeis just needs to be hashable and equateable,must be able to look it up in a hashtable
