@@ -25,7 +25,7 @@ struct EmojiMemoryGameView: View {
     //when we declare something as behaving like a view, it's really a double edge sword, the moment that you declare that something behaves like a view you get all the SwiftUI functionality, this also implies that there are respoinsiblities, when you want something to behave like a view and really that just requires for you to have the "body" variable below
     var body: some View {
         ScrollView{
-            LazyVGrid(columns:[GridItem(.adaptive(minimum: 65))]){ // the lazy in the name lazy V grid means that the views will only get accessed when aboslutely necessary as to not take computational power
+            LazyVGrid(columns:[GridItem(.adaptive(minimum: 100))]){ // the lazy in the name lazy V grid means that the views will only get accessed when aboslutely necessary as to not take computational power
                 // you must prespecify the values here if it is the case that the value has no intial value
                 ForEach(game.cards){card in
                     CardView(card: card)
@@ -74,7 +74,7 @@ struct CardView: View {
 //    init (_ card: MemoryGame<String>.Card){
 //        self.card = card
 //    }
-    // you could place this init here 
+    // you could place this init here
     
     var body: some View{ // this view is a variable, as it's calculated everytime someone asks for it
         ZStack{
@@ -99,6 +99,7 @@ struct CardView: View {
     }
 }
 
+//added some comment 
 
 
 
