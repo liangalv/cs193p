@@ -24,43 +24,17 @@ struct EmojiMemoryGameView: View {
     // :View this is indicating to swift that this struct that we are building behaves like a "View" because this is functional programming, the behaviour of things is crucial
     //when we declare something as behaving like a view, it's really a double edge sword, the moment that you declare that something behaves like a view you get all the SwiftUI functionality, this also implies that there are respoinsiblities, when you want something to behave like a view and really that just requires for you to have the "body" variable below
     var body: some View {
-        ScrollView{
-            LazyVGrid(columns:[GridItem(.adaptive(minimum: 100))]){ // the lazy in the name lazy V grid means that the views will only get accessed when aboslutely necessary as to not take computational power
-                // you must prespecify the values here if it is the case that the value has no intial value
-                ForEach(game.cards){card in
-                    CardView(card: card)
-                        .aspectRatio(2/3, contentMode: .fit)
-                        .onTapGesture{
-                            game.choose(card)
-                        }
-                        
+        AspectVGrid(items: game.cards, aspectRatio: 2/3,content: { card in
+            CardView(card: card)
+                .aspectRatio(2/3, contentMode: .fit)
+                .onTapGesture{
+                    game.choose(card)
+        
                 }
-                
-            }.padding(.horizontal).foregroundColor(.red)
-        }
-        
-        
-//placing modifiers on view combiners
-        // there are really two types of things that you'll see in a Zstack
-        // you'll see that the items inherit the color from its container, really just depends if the modifier draws a new shape, this is only the default color, you can still override the color
-        
-        
-
-        // this must be implemented
-        // "body" is the name of the variable
-        //some View is a non-specific way to descrive the behaviour of this var
-//        Text("Hello, world!")
-            
-        // Text("Hello, world!") is really just a function, in swift functions are first class citizens
-        //this is a function with no name, and in this case returns a text "hello world!"(where the return statement is hiddden)
-        //this variable "body" is therefore not stored in memory, but rather is executed each time someone asks this EmojiMemoryGameView struct what the value is
-        //A text is another struct that behavevs like a view
-        //So you have a function here that returns something that behaves like a view
-        // "some View" therefore indicates to the complier that the resulting value from the function will be some view, and to go figure out what that is
-        //the really useful views are those that combine these primitive views into more complicated views
-        
+        })
     }
-}
+        
+        
 
 
 //creating these views is the heart of SwiftUI programming
