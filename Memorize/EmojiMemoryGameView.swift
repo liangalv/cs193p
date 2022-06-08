@@ -88,7 +88,7 @@ struct CardView: View {
                 shape
                     .foregroundColor(.white)
                 Text(card.content)// in order to avoid all the boilerplate that we use to generate all these rectangles, we can use a var)
-            }else if card.isMatched{
+                }else if card.isMatched{
                 shape.opacity(0)
             }
             else{
@@ -121,7 +121,7 @@ struct CardView: View {
 
 
 
-
+        
 
 
 // this code is the code that glues the EmojiMemoryGameView to the previewer
