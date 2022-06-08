@@ -9,10 +9,13 @@ import SwiftUI
 
 @main
 struct memApp: App {
-    let game = EmojiMemGameVM()
+//    let game = EmojiMemGameVM()
+    let game = ImageMemGameVM()
     var body: some Scene {
         WindowGroup {
-            EmojiMemoryGameView(viewModel: game)
+//            EmojiMemoryGameView(viewModel: game)
+            ImageMemoryGameView(viewModel: game)
+            
         }
     }
 }
